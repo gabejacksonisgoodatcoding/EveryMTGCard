@@ -3,7 +3,7 @@ import CardGrid from "./backEnd/CardGrid";
   
 export default async function Page() {
 
-  const cards = await getCards(10);
+  const cards = await getCards(100);
 
   return (
     <>

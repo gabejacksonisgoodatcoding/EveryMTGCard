@@ -3,8 +3,10 @@ import { readFile } from 'fs/promises';
 import path from 'path';
 
 export type Card = {
+  id: string
   name: string
-  image_uris?:{
+  card_faces: string
+  image_uris:{
     small: string;
     normal: string;
     large: string;

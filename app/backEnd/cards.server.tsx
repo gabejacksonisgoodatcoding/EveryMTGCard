@@ -6,7 +6,8 @@ export type Card = {
   id: string
   name: string
   card_faces: string
-  image_uris:{
+  layout: string
+  image_uris?: {
     small: string;
     normal: string;
     large: string;

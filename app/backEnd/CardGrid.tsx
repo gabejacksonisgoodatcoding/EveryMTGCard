@@ -6,7 +6,7 @@ interface RenderCardHoverProps {
   card: Card;
   pos: { x: number; y: number };
 }
-
+//Function that handles the hovering over rendering
 function RenderCardHover({ card, pos }: RenderCardHoverProps){
 
 
@@ -57,8 +57,10 @@ export default function CardGrid({ cards }: {cards: Card[]}) {
 
   return (
     <>
-    <div className="grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-4 justify-start items-start">
-        {cards.filter(card => card.layout === 'normal').map((card) =>( 
+
+
+    <div className="grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-4 justify-start items-start h-fit w-full">
+        {cards.map((card) =>( 
         
         <div 
         onMouseMove={(e) => {
@@ -69,9 +71,9 @@ export default function CardGrid({ cards }: {cards: Card[]}) {
       }}
       onMouseLeave = {()=>setIsHovering(false)} 
       onMouseEnter = {() => {setIsHovering(true); setHoverCard(card)}} 
-      className = "border p-2 flex flex-col items-center"key={card.id} >
+      className = "p-2 flex flex-col items-center"key={card.id} >
 
-        <h1>{card?.name}</h1>
+        <p className="text-nowrap text-red-500">{card?.name}</p>
         <a target="_blank" href={card?.purchase_uris?.tcgplayer}>
         <img  className= "w-full h-auto"src={getCardImageSmall(card)} loading="lazy"></img>
         </a>

@@ -1,6 +1,7 @@
 import "server-only"
 import { readFile } from 'fs/promises';
 import path from 'path';
+import { encode } from "punycode";
 
 export type Card = {
   id: string
@@ -22,16 +23,19 @@ export type Card = {
   }
 
 }
-  
-export async function getCards(limit = 10): Promise <Card[]> {
+//Function that calls scryfall api and returns an array of Cards
+export async function getCards(floor = 0, ceiling = 10, page = 1, search=""): Promise <Card[]> {
 
-  const filePath = path.join(process.cwd(), 'public', 'default-cards.json');
-  const json = await readFile(filePath, 'utf-8');
+  const encodedSearch = encodeURIComponent(search)
+  const res = await fetch(
+    `https://api.scryfall.com/cards/search?page=${page}&q=${encodedSearch}&unique=cards`
+  );
+  const data = await res.json() 
 
 
-  const cards: Card[] = JSON.parse(json)
+  const cards: Card[] = data.data
 
-  return(cards.slice(0, limit))
+  return(cards)
 }
 
 

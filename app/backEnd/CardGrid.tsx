@@ -11,11 +11,11 @@ function RenderCardHover({ card, pos }: RenderCardHoverProps){
 
 
   function getCardImageNormal(card: Card){
-    let image;
+    var image;
     if (card.image_uris) {
       image = card.image_uris.normal;
     } else if (card.card_faces) {
-        image = card.card_faces[0].image_uris.normal;
+        image = card.card_faces?.[0]?.image_uris?.normal
       }
     return image;
   }
@@ -27,7 +27,7 @@ function RenderCardHover({ card, pos }: RenderCardHoverProps){
     const y = Math.min(pos.y + 20, window.innerHeight - imgHeight);
     
     return(
-        <div className = "fixed z-50 p-2 border-2 pointer-events-none border-white" 
+        <div className = "fixed z-50 p-2 border-2 pointer-events-none" 
         style={{
         left: x,
         top: y,
@@ -43,23 +43,36 @@ export default function CardGrid({ cards }: {cards: Card[]}) {
   const [isHovering, setIsHovering] = useState(false);
   const [hoverCard, setHoverCard] = useState<Card>()
   const [pos, setPos] = useState({ x: 0, y: 0 });
+  const [isCards, setIsCards] = useState(true)
+
+  useEffect(() => { 
+    if(cards.length <= 0){
+      setIsCards(false)
+    }
+    else{
+      setIsCards(true)
+    }},[cards]);
+
+
+
 
   function getCardImageSmall(card: Card) {
-    let image;
+    var image;
     if (card.image_uris) {
       image = card.image_uris.small;
     } else if (card.card_faces) {
-        image = card.card_faces[0].image_uris.small;
+        image = card.card_faces?.[0]?.image_uris?.small
       }
     return image;
 
+
   }
+    console.log("is cards?" + isCards)
+
 
   return (
     <>
-
-
-    <div className="grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-4 justify-start items-start h-fit w-full">
+    {isCards && <div className="grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-4 justify-start items-start h-fit w-full">
         {cards.map((card) =>( 
         
         <div 
@@ -73,13 +86,16 @@ export default function CardGrid({ cards }: {cards: Card[]}) {
       onMouseEnter = {() => {setIsHovering(true); setHoverCard(card)}} 
       className = "p-2 flex flex-col items-center"key={card.id} >
 
-        <p className="text-nowrap text-red-500">{card?.name}</p>
+        <p className="text-blue-500 truncate w-40 hover:text-wrap">{card?.name}</p>
         <a target="_blank" href={card?.purchase_uris?.tcgplayer}>
         <img  className= "w-full h-auto"src={getCardImageSmall(card)} loading="lazy"></img>
         </a>
 
         </div>))}
-    </div>
+    </div>}
+    {!isCards && <div className="justify-center justify-items-center">
+      <h1>No Cards Found</h1>
+    </div>}
     {isHovering && hoverCard && <RenderCardHover card={hoverCard} pos={pos} />}
     </>
   );

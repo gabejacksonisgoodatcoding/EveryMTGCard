@@ -2,28 +2,38 @@ import { getCards } from "./backEnd/cards.server"
 import CardGrid from "./backEnd/CardGrid";
 import PageTurn from "./backEnd/PageTurner"
 import Search from "./backEnd/Search";
-import '@/app/globals.css';
 
+type SearchParams = {
+  [key: string]: string
+}
 
-
-export default async function Page({searchParams,
-}: {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
-})
+export default async function Page({ searchParams }: {searchParams: Promise<SearchParams>})
 {
-  const params = await searchParams
 
+  //Grab the search params from the url 
+  //p = page
+  //s = search
+  //c = color
+  const params = await searchParams
   const page = Number(params?.p ?? "1") 
   const floor = (page - 1) * 1
   const ceiling = page * 10
   const search = params?.s ?? ""
-  const cards = await getCards(floor, ceiling, page, search) ?? [];
+  const colors = params?.c ?? ""
+
+
+  const cards = await getCards(floor, ceiling, page, search, colors)
+
+  console.log("my search = " + search)
+  console.log("my cards = " + cards.length)
 
   return (
     <>
+
       <Search/>
       <PageTurn/>
       <CardGrid cards={cards}></CardGrid>
+
     </>
   )
 };

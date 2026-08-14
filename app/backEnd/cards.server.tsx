@@ -1,12 +1,19 @@
 import "server-only"
-import { readFile } from 'fs/promises';
-import path from 'path';
-import { encode } from "punycode";
+
 
 export type Card = {
   id: string
   name: string
-  card_faces: string
+  card_faces?:{
+    image_uris?:{
+      small: string;
+      normal: string;
+      large: string;
+      png: string;
+      art_crop: string;
+      border_crop: string;
+    }
+  }[]
   layout: string
   image_uris?: {
     small: string;
@@ -24,18 +31,33 @@ export type Card = {
 
 }
 //Function that calls scryfall api and returns an array of Cards
-export async function getCards(floor = 0, ceiling = 10, page = 1, search=""): Promise <Card[]> {
+export async function getCards(floor = 0, ceiling = 10, page = 1, search="", colors=""): Promise <Card[]> {
+  
+  const formated_colors = `c:${colors}`
 
-  const encodedSearch = encodeURIComponent(search)
+
+  const wholeQuery = encodeURIComponent(search + " " + formated_colors)
+
+  const myFetch = `https://api.scryfall.com/cards/search?page=${page}&q=${wholeQuery}&unique=cards`
+
+  console.log(myFetch)
+
   const res = await fetch(
-    `https://api.scryfall.com/cards/search?page=${page}&q=${encodedSearch}&unique=cards`
+    myFetch, {headers:{
+      "User-Agent" : "EveryMTGCard/0.1.0",
+    }}
   );
+
+
   const data = await res.json() 
 
+  var cards: Card[] = data.data
 
-  const cards: Card[] = data.data
+  if(!cards){
+    cards = []
+  }
 
-  return(cards)
+  return cards
 }
 
 

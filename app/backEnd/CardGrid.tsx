@@ -67,7 +67,6 @@ export default function CardGrid({ cards }: {cards: Card[]}) {
 
 
   }
-    console.log("is cards?" + isCards)
 
 
   return (
@@ -86,7 +85,7 @@ export default function CardGrid({ cards }: {cards: Card[]}) {
       onMouseEnter = {() => {setIsHovering(true); setHoverCard(card)}} 
       className = "p-2 flex flex-col items-center"key={card.id} >
 
-        <p className="text-blue-500 truncate w-40 hover:text-wrap">{card?.name}</p>
+        <p className="text-white-500 truncate w-40 hover:text-wrap">{card?.name}</p>
         <a target="_blank" href={card?.purchase_uris?.tcgplayer}>
         <img  className= "w-full h-auto"src={getCardImageSmall(card)} loading="lazy"></img>
         </a>

@@ -30,15 +30,25 @@ export type Card = {
   }
 
 }
+
+function getCardsAdvanced(search="", colors="", page=1){
+  var advancedQuery = ""
+  advancedQuery += search 
+  advancedQuery += `c: ${colors}`
+  advancedQuery = encodeURIComponent(advancedQuery)
+  return `https://api.scryfall.com/cards/search?page=${page}&q=${advancedQuery}&unique=cards`
+}
 //Function that calls scryfall api and returns an array of Cards
-export async function getCards(floor = 0, ceiling = 10, page = 1, search="", colors=""): Promise <Card[]> {
+export async function getCards(floor = 0, ceiling = 10, page = 1, search="", colors="", creature="", advanced=""): Promise <Card[]> {
   
-  const formated_colors = `c:${colors}`
+  var myFetch
+  var myQuery = ""
+  myQuery +=search + " "
+  colors ? myQuery +=`c:${colors} ` : myQuery+=""
+  creature ? myQuery += `t:${creature} ` : myQuery+=""
 
-
-  const wholeQuery = encodeURIComponent(search + " " + formated_colors)
-
-  const myFetch = `https://api.scryfall.com/cards/search?page=${page}&q=${wholeQuery}&unique=cards`
+  myQuery = encodeURI(myQuery);
+  myFetch = `https://api.scryfall.com/cards/search?page=${page}&q=${myQuery}&unique=cards`
 
   console.log(myFetch)
 

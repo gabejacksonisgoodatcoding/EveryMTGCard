@@ -20,12 +20,19 @@ export default async function Page({ searchParams }: {searchParams: Promise<Sear
   const ceiling = page * 10
   const search = params?.s ?? ""
   const colors = params?.c ?? ""
+  const advanced = params?.a ?? ""
+  const creature_type = params?.t ?? ""
 
 
-  const cards = await getCards(floor, ceiling, page, search, colors)
+  const cards = await getCards(floor, ceiling, page, search, colors, creature_type, advanced)
 
   console.log("my search = " + search)
+  console.log("my colors = " + colors)
+  console.log("Advanced Search = " + advanced)
   console.log("my cards = " + cards.length)
+  console.log("my creature type = " + creature_type)
+  
+  
 
   return (
     <>
